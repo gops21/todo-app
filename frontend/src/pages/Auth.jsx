@@ -1,18 +1,55 @@
-import React from 'react';
-import Login from '../components/auth/Login';
-import Register from '../components/auth/Register';
-import Layout from '../components/Layout';
-import classes from './Auth.module.scss';
+import React from 'react'
+import axios from 'axios';
+import useAuth from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 
 function Auth() {
+  const {verifyAuth, auth} = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(auth) {
+      navigate('/');
+    }
+  }, [auth])
+
+  const login = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    try{
+      await axios.post('/api/auth/login', { email, password });
+      await verifyAuth();
+      navigate('/');
+    }catch(err){
+      console.log(err);
+      verifyAuth();
+    }
+
+    console.log(email, password);
+  }
   return (
-    <Layout>
-      <div className={classes.form_container}>
-        <Login />
-        <Register />
-      </div>
-    </Layout>
-  );
+    <>
+      <h1>login</h1>
+      <Link to="/">Home</Link>
+      <form onSubmit={login}>
+      <label htmlFor="email">
+        email: 
+        <input name="email" type="email" placeholder="email" required />
+      </label>
+      <br />
+      <label htmlFor="password">
+        password: 
+        <input name="password" type="password" placeholder="password" required />
+      </label>
+      <br />
+      <button type='submit'>login</button>
+      </form>
+    </>
+
+  )
 }
 
-export default Auth;
+export default Auth
