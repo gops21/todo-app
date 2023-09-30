@@ -45,7 +45,7 @@ app.use((err, req, res) => {
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_CONNECTION_STRING);
+    await mongoose.connect(process.env.DB_CONNECTION_STRING || "mongodb+srv://shreyanshora123:shreyansh123@cluster0.xzl57d6.mongodb.net/?retryWrites=true&w=majority");
     console.log('MongoDB Connected');
   } catch (err) {
     console.log(err);
