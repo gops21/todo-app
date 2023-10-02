@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use('/api', allRoutes);
 
 // error handler
-app.use((err, req, res) => {
+app.use((error, request, res, next) => {
   const status = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
   res.status(status).json({ message, stack: err.stack });
